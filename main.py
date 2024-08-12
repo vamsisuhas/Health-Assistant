@@ -3,25 +3,6 @@ import numpy as np
 import pandas as pd
 import pickle
 
-# flask app
-app = Flask(__name__)
-
-#extra chunk for firebase
-from flask import Flask, jsonify
-
-app = Flask(_name_)
-
-@app.route('/')
-def hello():
-    return jsonify(message="Hello, World!")
-
-# Firebase will run the app as a WSGI application
-from flask import Request
-
-def firebase_app(request: Request):
-    return app(request.environ, start_response)
-#ends here
-
 # load databasedataset===================================
 sym_des = pd.read_csv("datasets/symtoms_df.csv")
 precautions = pd.read_csv("datasets/precautions_df.csv")
@@ -128,6 +109,6 @@ def blog():
     return render_template("blog.html")
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    app.run(debug=True)
+#     app.run(debug=True)
