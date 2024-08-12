@@ -6,7 +6,21 @@ import pickle
 # flask app
 app = Flask(__name__)
 
+#extra chunk for firebase
+from flask import Flask, jsonify
 
+app = Flask(_name_)
+
+@app.route('/')
+def hello():
+    return jsonify(message="Hello, World!")
+
+# Firebase will run the app as a WSGI application
+from flask import Request
+
+def firebase_app(request: Request):
+    return app(request.environ, start_response)
+#ends here
 
 # load databasedataset===================================
 sym_des = pd.read_csv("datasets/symtoms_df.csv")
@@ -116,5 +130,4 @@ def blog():
 
 if __name__ == '__main__':
 
-    # app.run(debug=True)
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)
