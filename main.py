@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 import pickle
 
+# flask app
+app = Flask(__name__)
+
 # load databasedataset===================================
 sym_des = pd.read_csv("datasets/symtoms_df.csv")
 precautions = pd.read_csv("datasets/precautions_df.csv")
