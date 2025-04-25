@@ -1,0 +1,18 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 982-122-274
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:30:52] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:30:52] "GET /static/img.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:30:53] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+ERROR:root:Error in prediction: name 'symptoms_dict' is not defined
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:04] "POST /predict HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:04] "[36mGET /static/img.png HTTP/1.1[0m" 304 -
+ERROR:root:Error in prediction: name 'symptoms_dict' is not defined
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:11] "POST /predict HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:11] "[36mGET /static/img.png HTTP/1.1[0m" 304 -
+ERROR:root:Error in prediction: name 'symptoms_dict' is not defined
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:19] "POST /predict HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:19] "[36mGET /static/img.png HTTP/1.1[0m" 304 -
+ERROR:root:Error in prediction: name 'symptoms_dict' is not defined
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:27] "POST /predict HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Apr/2025 20:31:27] "[36mGET /static/img.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in '/Users/vamsisuhas/Documents/project/Health-Assistant/main.py', reloading
