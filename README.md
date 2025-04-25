@@ -4,7 +4,7 @@ Follow the steps below to set up and run the project:
 
 **📥 1. Download or Clone the Repository**
 
-- git clone https://github.com/your-username/your-repo.git
+- git clone [https://github.com/vamsisuhas/Health-Assistant.git](url)
 - cd your-repo
 
 Or download the ZIP file and extract it manually.
@@ -23,7 +23,6 @@ Or download the ZIP file and extract it manually.
 - pip install -r requirements.txt
 
 **🔍 3. Install FuzzyWuzzy**
-If it's not already in the requirements:
 - pip install fuzzywuzzy
   
 **▶️ 4. Run the Project**
