@@ -6,6 +6,16 @@ import pickle
 # flask app
 app = Flask(__name__)
 
+# Custom 404 error handler
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404  # Create a 404.html page with a user-friendly message
+
+# Custom 403 error handler
+@app.errorhandler(403)
+def forbidden(error):
+    return render_template('403.html'), 403  # Create a 403.html page with an appropriate message
+
 # load databasedataset===================================
 sym_des = pd.read_csv("datasets/symtoms_df.csv")
 precautions = pd.read_csv("datasets/precautions_df.csv")
@@ -85,56 +95,62 @@ def index():
 # Define a route for the home page
 from fuzzywuzzy import process
 
+from fuzzywuzzy import process
+
 @app.route('/predict', methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
-        symptoms = request.form.get('symptoms')
+    try:
+        if request.method == 'POST':
+            symptoms = request.form.get('symptoms')
 
-        if symptoms == "Symptoms" or not symptoms:
-            message = "Please enter symptoms correctly. Ensure they are valid and separated by commas."
-            return render_template('index.html', message=message)
-        else:
-            # List of invalid words to exclude
-            invalid_words = ["yes", "no", "fuck", "bad", "nothing", "na", "none"]
-
-            # Normalize and clean up the user's input symptoms
-            user_symptoms = [s.strip().lower() for s in symptoms.split(',')]
+            if not symptoms or symptoms == "Symptoms":
+                message = "Please enter symptoms correctly. Ensure they are valid and separated by commas."
+                return render_template('index.html', message=message)
             
-            # Filter out invalid words
+            # Normalizing and cleaning input symptoms
+            user_symptoms = [s.strip().lower() for s in symptoms.split(',')]
+
+            # Check if the symptoms match any valid symptom from the list
+            invalid_words = ["yes", "no", "bad", "nothing", "none"]
             user_symptoms = [symptom for symptom in user_symptoms if symptom not in invalid_words]
 
             if not user_symptoms:
-                message = "Please enter meaningful symptoms. Avoid using irrelevant words."
+                message = "Please enter valid symptoms. Avoid irrelevant words."
                 return render_template('index.html', message=message)
 
-            # Initialize input vector for symptom matching
+            # Initialize input vector and find predicted disease
             input_vector = np.zeros(len(symptoms_dict))
 
-            # Process each symptom in user input and match with symptoms_dict
             for symptom in user_symptoms:
-                # Normalize the symptom by stripping extra spaces and converting to lowercase
-                normalized_symptom = symptom.strip().lower()
-
-                # Ensure we match exactly against known symptoms in symptoms_dict
-                if normalized_symptom in symptoms_dict:
-                    input_vector[symptoms_dict[normalized_symptom]] = 1
+                # Check if the symptom exists in the dictionary
+                if symptom in symptoms_dict:
+                    input_vector[symptoms_dict[symptom]] = 1
                 else:
-                    print(f"Warning: '{symptom}' does not match any known symptom exactly.")
+                    best_match = process.extractOne(symptom, symptoms_dict.keys())
+                    if best_match and best_match[1] >= 80:
+                        matched_symptom = best_match[0]
+                        input_vector[symptoms_dict[matched_symptom]] = 1
 
-            # Get predicted disease
-            predicted_disease = diseases_list.get(svc.predict([input_vector])[0], "Unknown Disease")
+            # Get disease prediction
+            predicted_value = svc.predict([input_vector])
+            predicted_disease = diseases_list.get(predicted_value[0], "Unknown Disease")
 
-            # Retrieve related data (description, precautions, medications, etc.)
+            # Fetch related information from helper function
             dis_des, precautions, medications, rec_diet, workout = helper(predicted_disease)
 
-            # Prepare the precautions for rendering
+            # Prepare data for display
             my_precautions = [precaution for precaution in precautions[0]]
-            
+
             return render_template('index.html', predicted_disease=predicted_disease, 
                                    dis_des=dis_des, my_precautions=my_precautions,
                                    medications=medications, my_diet=rec_diet, workout=workout)
 
-    return render_template('index.html')
+    except Exception as e:
+        # Handle any unforeseen errors and display a friendly message
+        print(f"An error occurred: {e}")
+        message = "An unexpected error occurred. Please try again later."
+        return render_template('index.html', message=message)
+
 
 
 
@@ -161,3 +177,4 @@ def blog():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
